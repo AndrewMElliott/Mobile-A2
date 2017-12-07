@@ -46,11 +46,6 @@ public class ViewPatientActivity extends AppCompatActivity {
 
         getPatient(String.valueOf(p.getId()));
         populateListView();
-        Toast.makeText(getBaseContext(), String.valueOf(p.getId()),
-                Toast.LENGTH_LONG).show();
-//        firstName.setText("Patient: " + p.getFirstName().toString() + " " + p.getLastName().toString());
-//        doctor.setText("Attending Physician: " + getDoctorName(String.valueOf(p.getDoctorID())));
-//        room.setText("Located in Room: " + String.valueOf(p.getRoom()));
 
         edtPatient = (Button)findViewById(R.id.btnEditPat);
         addTest    = (Button)findViewById(R.id.btnAddTest);
@@ -60,7 +55,6 @@ public class ViewPatientActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(ViewPatientActivity.this,PatientActivity.class);
-
                 startActivity(intent);
             }
         });
@@ -85,10 +79,10 @@ public class ViewPatientActivity extends AppCompatActivity {
             }
         });
     }
+
     private void populateListView() {
         final List<Integer> testID = new ArrayList<>();
-//        Toast.makeText(getBaseContext(), "populating list",
-//                Toast.LENGTH_LONG).show();
+
         DbHelper db = new DbHelper(getApplicationContext());
         //get data and append to the list
         Cursor data = db.getTests(String.valueOf(p.getId()));
@@ -108,7 +102,6 @@ public class ViewPatientActivity extends AppCompatActivity {
         testListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // String name = adapterView.getItemAtPosition(i).toString();
                 Intent viewPatient = new Intent(ViewPatientActivity.this, ReviewTestActivity.class);
                 Bundle b = new Bundle();
                 b.putInt("testID",testID.get(i));
@@ -120,7 +113,6 @@ public class ViewPatientActivity extends AppCompatActivity {
     }
     private void getPatient(String id){
         DbHelper db = new DbHelper(getApplicationContext());
-        //Patient p = (Patient) getIntent().getSerializableExtra("patient");
         Cursor cur = db.getPatientById(id);
 
         while(cur.moveToNext()){
@@ -128,7 +120,6 @@ public class ViewPatientActivity extends AppCompatActivity {
             doctor.setText("Attending Physician: " +getDoctorName(String.valueOf(cur.getInt(3))));
             room.setText("Located in Room: " +String.valueOf(cur.getInt(4)));
         }
-
     }
 
     private String getDoctorName(String id){

@@ -1,5 +1,6 @@
 package com.example.comp3074.a2100872220;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ public class AddPatientActivity extends AppCompatActivity implements AdapterView
     private EditText room;
     private Button enter;
     private List<Integer> docIDs;
-    private Integer selectedID;
+    private boolean canContinue = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,10 @@ public class AddPatientActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(View view){
                 validateFields();
+                if(canContinue){
+                    Intent intent = new Intent(AddPatientActivity.this, PatientActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -78,6 +83,7 @@ public class AddPatientActivity extends AppCompatActivity implements AdapterView
         }
         if(validFN && validLN && validRoom){
             addPatientInformation();
+            canContinue = true;
         } else {
 
         }
@@ -108,7 +114,7 @@ public class AddPatientActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selectedID = docIDs.get(position);
+        //selectedID = docIDs.get(position);
 
     }
 

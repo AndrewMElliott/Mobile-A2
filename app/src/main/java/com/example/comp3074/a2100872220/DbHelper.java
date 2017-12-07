@@ -86,15 +86,16 @@ public class DbHelper extends SQLiteOpenHelper{
 
     }
 
-    public Cursor confirmLogin(String firstName, String pw){
+    public Cursor confirmLogin(String firstName, String pw, String table){
 
-        String query = "SELECT first_name, password FROM nurse WHERE first_name ='" + firstName +
+        String query = "SELECT first_name, password FROM "+table+" WHERE first_name ='" + firstName +
                 "' AND password = '" + pw +"';" ;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query,null);
 
         return c;
     }
+
 
     public Cursor getDoctorData(){
 

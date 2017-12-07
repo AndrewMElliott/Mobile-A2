@@ -45,9 +45,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean checkLogin(String username, String pw){
         DbHelper helper = new DbHelper(this);
 
-        Cursor cur = helper.confirmLogin(username,pw);
-        if(cur.moveToFirst()){
-            user = cur.getString(cur.getColumnIndex("first_name"));
+        Cursor cur = helper.confirmLogin(username,pw,"nurse");
+        Cursor curTwo = helper.confirmLogin(username,pw,"doctor");
+        if(cur.moveToFirst() ){
+            //user = cur.getString(cur.getColumnIndex("first_name"));
+            return true;
+        } else if(curTwo.moveToFirst()) {
+            //user = cur.getString(cur.getColumnIndex("first_name"));
             return true;
         } else {
             return false;

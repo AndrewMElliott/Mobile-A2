@@ -22,7 +22,7 @@ public class EditPatientActivity extends AppCompatActivity implements AdapterVie
     private EditText room;
     private Button enter;
     private List<Integer> docIDs;
-    private Integer selectedID;
+
     private Patient pat;
     private boolean canContinue = false;
 
@@ -38,6 +38,7 @@ public class EditPatientActivity extends AppCompatActivity implements AdapterVie
         enter = (Button) findViewById(R.id.btnEditPat);
         pat = (Patient)getIntent().getSerializableExtra("patient");
         docIDs = new ArrayList<>();
+        setText();
         enter.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -56,6 +57,16 @@ public class EditPatientActivity extends AppCompatActivity implements AdapterVie
         loadDoctorSpinner();
     }
 
+    private void setText(){
+        DbHelper db = new DbHelper(getApplicationContext());
+        Cursor cur = db.getPatientById(String.valueOf(pat.getId()));
+        while(cur.moveToNext()){
+            firstName.setText(cur.getString(1));
+            lastName.setText(cur.getString(2));
+            room.setText(String.valueOf(cur.getInt(4)));
+        }
+    }
+
     private void updatePatientInformation(){
         DbHelper db = new DbHelper(getApplicationContext());
         db.updatePatient(firstName.getText().toString(),
@@ -64,8 +75,6 @@ public class EditPatientActivity extends AppCompatActivity implements AdapterVie
                 docIDs.get(doctors.getSelectedItemPosition()),
                 pat.getId());
         db.close();
-
-
 
     }
 
@@ -92,7 +101,7 @@ public class EditPatientActivity extends AppCompatActivity implements AdapterVie
 
         }
     }
-
+    //Load spinner with doctor names from database
     private void loadDoctorSpinner() {
         DbHelper db = new DbHelper(getApplicationContext());
         Cursor cur = db.getDoctorData();
@@ -118,7 +127,7 @@ public class EditPatientActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selectedID = docIDs.get(position);
+        //selectedID = docIDs.get(position);
 
     }
 

@@ -38,12 +38,12 @@ public class ReviewTestActivity extends AppCompatActivity {
         DbHelper db = new DbHelper(getApplicationContext());
         Cursor cur = db.getTestById(String.valueOf(testID));
         while(cur.moveToNext()){
-            id.setText("Test ID: " + String.valueOf(cur.getInt(0)));
-            BPS.setText("Systolic BP : " + String.valueOf(cur.getInt(2)));
-            BPD.setText("Diastolic BP : " + String.valueOf(cur.getInt(3)));
-            temp.setText("Temperature : " + String.valueOf(cur.getInt(4)));
-            blood.setText("Blood Sugar: " + String.valueOf(cur.getInt(5)));
-            eyes.setText("Eye Acuity: " + String.valueOf(cur.getInt(6)) + "/20");
+            id.setText(   "Test ID             : " + String.valueOf(cur.getInt(0)));
+            BPS.setText(  "Systolic BP     :  " + String.valueOf(cur.getInt(2)));
+            BPD.setText(  "Diastolic BP   : " + String.valueOf(cur.getInt(3)));
+            temp.setText( "Temperature  : " + String.valueOf(cur.getInt(4)));
+            blood.setText("Blood Sugar   : " + String.valueOf(cur.getInt(5)));
+            eyes.setText( "Eye Acuity       : " + String.valueOf(cur.getInt(6)) + "/20");
         }
     }
 }

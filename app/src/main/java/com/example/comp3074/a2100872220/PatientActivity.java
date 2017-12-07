@@ -41,14 +41,11 @@ public class PatientActivity extends AppCompatActivity {
 
     public void switchToAddPatientScreen(){
         Intent intent = new Intent(PatientActivity.this, AddPatientActivity.class);
-       // intent.putExtra("user", this.user);
         startActivity(intent);
     }
 
     private void populateListView() {
         final List<Patient> patients = new ArrayList<>();
-//        Toast.makeText(getBaseContext(), "populating list",
-//                Toast.LENGTH_LONG).show();
         DbHelper db = new DbHelper(getApplicationContext());
         //get data and append to the list
         Cursor data = db.getPatients();
