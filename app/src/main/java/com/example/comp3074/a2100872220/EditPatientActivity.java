@@ -1,7 +1,7 @@
 package com.example.comp3074.a2100872220;
 
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,11 +13,8 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static android.R.attr.data;
-
-public class AddPatientActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class EditPatientActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private Spinner doctors;
     private EditText firstName;
@@ -26,34 +23,46 @@ public class AddPatientActivity extends AppCompatActivity implements AdapterView
     private Button enter;
     private List<Integer> docIDs;
     private Integer selectedID;
+    private Patient pat;
+    private boolean canContinue = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_patient);
+        setContentView(R.layout.activity_edit_patient);
 
-        doctors = (Spinner) findViewById(R.id.spnDoctor);
-        firstName = (EditText) findViewById(R.id.edtFirstName);
-        lastName = (EditText) findViewById(R.id.edtLastName);
-        room = (EditText) findViewById(R.id.edtRoom);
-        enter = (Button) findViewById(R.id.btnEnter);
+        doctors = (Spinner) findViewById(R.id.spnEdtDoc);
+        firstName = (EditText) findViewById(R.id.edtPaFN);
+        lastName = (EditText) findViewById(R.id.edtPaLn);
+        room = (EditText) findViewById(R.id.edtPaRoom);
+        enter = (Button) findViewById(R.id.btnEditPat);
+        pat = (Patient)getIntent().getSerializableExtra("patient");
         docIDs = new ArrayList<>();
         enter.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 validateFields();
+                if(canContinue) {
+
+                    Intent intent = new Intent(EditPatientActivity.this, ViewPatientActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("patient",pat);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
             }
         });
 
         loadDoctorSpinner();
     }
 
-    private void addPatientInformation(){
+    private void updatePatientInformation(){
         DbHelper db = new DbHelper(getApplicationContext());
-        db.insertPatient(firstName.getText().toString(),
-                        lastName.getText().toString(),
-                        Integer.parseInt(room.getText().toString()),
-                        docIDs.get(doctors.getSelectedItemPosition()));
+        db.updatePatient(firstName.getText().toString(),
+                lastName.getText().toString(),
+                Integer.parseInt(room.getText().toString()),
+                docIDs.get(doctors.getSelectedItemPosition()),
+                pat.getId());
         db.close();
 
 
@@ -77,7 +86,8 @@ public class AddPatientActivity extends AppCompatActivity implements AdapterView
             validRoom = false;
         }
         if(validFN && validLN && validRoom){
-            addPatientInformation();
+            updatePatientInformation();
+            canContinue = true;
         } else {
 
         }
@@ -116,5 +126,4 @@ public class AddPatientActivity extends AppCompatActivity implements AdapterView
     public void onNothingSelected(AdapterView<?> arg0) {
 
     }
-
 }

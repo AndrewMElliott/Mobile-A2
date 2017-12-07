@@ -61,15 +61,16 @@ public class DbHelper extends SQLiteOpenHelper{
                     "FOREIGN KEY(patient_id) REFERENCES doctor(patient_id));");
 
         insertUser(db,"nurse", "nurse", "set", "admin", "nursing");
-        insertUser(db,"doctor", "doctor", "sit", "admin", "MD");
+        insertUser(db,"nurse", "sarah", "tell", "admin", "nursing");
+        insertUser(db,"nurse", "adam", "west", "admin", "nursing");
+        insertUser(db,"doctor", "doctor", "the", "admin", "MD");
+        insertUser(db,"doctor", "tim", "tam", "admin", "MD");
+        insertUser(db,"doctor", "michael", "smith", "admin", "MD");
+        insertUser(db,"doctor", "brian", "carson", "admin", "MD");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        db.execSQL("DROP IF TABLE EXISTS nurse;");
-        db.execSQL("DROP IF TABLE EXISTS doctor;");
-        db.execSQL("DROP IF TABLE EXISTS patient;");
-        db.execSQL("DROP IF TABLE EXISTS test;");
         onCreate(db);
     }
 
@@ -95,34 +96,79 @@ public class DbHelper extends SQLiteOpenHelper{
         return c;
     }
 
-    public Map<Integer,String> getDoctorData(String table){
-        Map<Integer,String> names = new HashMap<>();
-        String query = "SELECT * FROM "+table+";";
+    public Cursor getDoctorData(){
+
+        String query = "SELECT * FROM doctor;";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(query,null);
-        if (c.moveToFirst()) {
-            do {
-                names.put(c.getInt(0), c.getString(1));
-            } while (c.moveToNext());
-        }
-        c.close();
-        return names;
+        return c;
     }
 
-    public void insertPatient(String firstName, String lastName, Integer room){
+    public void insertPatient(String firstName, String lastName, Integer room, Integer docID){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("first_name", firstName);
         values.put("last_name", lastName);
         values.put("room", room);
-
+        values.put("doctor_id", docID);
 
         db.insert("patient",null,values);
     }
+    public void insertTest(Integer patID, Integer BPsys, Integer BPdio, Integer temp, Integer eyes, Integer blds){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("patient_id", patID);
+        values.put("BP_systolic", BPsys);
+        values.put("BP_diastolic", BPdio);
+        values.put("temperature", temp);
+        values.put("blood_sugar", blds);
+        values.put("eye_test", eyes);
+
+        db.insert("test", null, values);
+    }
+
+    public void updatePatient(String firstName, String lastName, Integer room, Integer docID, Integer patID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("first_name",firstName);
+        values.put("last_name",lastName);
+        values.put("room",room);
+        values.put("doctor_id", docID);
+
+        db.update("patient", values, "patient_id='"+patID+"'", null);
+    }
     public Cursor getPatients(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM patient;";
-        Cursor data = db.rawQuery(query, null);
+        String query      = "SELECT * FROM patient;";
+        Cursor data       = db.rawQuery(query, null);
         return data;
+    }
+
+    public Cursor getDoctorByID(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query      = "SELECT * FROM doctor WHERE doctor_id = "+id+";";
+        Cursor data       = db.rawQuery(query, null);
+        return data;
+    }
+
+    public Cursor getPatientById(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query      = "SELECT * FROM patient WHERE patient_id = "+id+";";
+        Cursor data       = db.rawQuery(query, null);
+        return data;
+    }
+    public Cursor getTestById(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query      = "SELECT * FROM test WHERE test_id = "+id+";";
+        Cursor data       = db.rawQuery(query, null);
+        return data;
+    }
+
+    public Cursor getTests(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query      = "SELECT * FROM test WHERE patient_id = "+id+";";
+        Cursor data       = db.rawQuery(query, null);
+        return data;
+
     }
 }

@@ -14,11 +14,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PatientActivity extends AppCompatActivity {
 
     private Button addPatient;
     private ListView list;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public class PatientActivity extends AppCompatActivity {
                 switchToAddPatientScreen();
             }
         });
-        Log.d( "whatever","populateListView: Oncreate");
+
         list = (ListView) findViewById(R.id.lstView);
         populateListView();
     }
@@ -44,44 +46,35 @@ public class PatientActivity extends AppCompatActivity {
     }
 
     private void populateListView() {
-        Toast.makeText(getBaseContext(), "populating list",
-                Toast.LENGTH_LONG).show();
+        final List<Patient> patients = new ArrayList<>();
+//        Toast.makeText(getBaseContext(), "populating list",
+//                Toast.LENGTH_LONG).show();
         DbHelper db = new DbHelper(getApplicationContext());
-        //get the data and append to a list
+        //get data and append to the list
         Cursor data = db.getPatients();
         ArrayList<String> listData = new ArrayList<>();
         while(data.moveToNext()){
-            //get the value from the database in column 1
-            //then add it to the ArrayList
+            Patient p = new Patient(data.getInt(0));
+            patients.add(p);
             listData.add(data.getString(1));
         }
-        //create the list adapter and set the adapter
+        //create list adapter and set the adapter
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
         list.setAdapter(adapter);
 
-        //set an onItemClickListener to the ListView
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                String name = adapterView.getItemAtPosition(i).toString();
-//                Log.d(TAG, "onItemClick: You Clicked on " + name);
-//
-//                Cursor data = mDatabaseHelper.getItemID(name); //get the id associated with that name
-//                int itemID = -1;
-//                while(data.moveToNext()){
-//                    itemID = data.getInt(0);
-//                }
-//                if(itemID > -1){
-//                    Intent editScreenIntent = new Intent(ListDataActivity.this, EditDataActivity.class);
-//                    editScreenIntent.putExtra("id",itemID);
-//                    editScreenIntent.putExtra("name",name);
-//                    startActivity(editScreenIntent);
-//                }
-//                else{
-//
-//                }
-//            }
-//        });
+        //set onItemClickListener to ListView
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               // String name = adapterView.getItemAtPosition(i).toString();
+                Intent viewPatient = new Intent(PatientActivity.this, ViewPatientActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("patient", patients.get(i));
+                viewPatient.putExtras(b);
+                startActivity(viewPatient);
+
+            }
+        });
     }
     @Override
     public void onRestart() {

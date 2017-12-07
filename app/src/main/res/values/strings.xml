@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">A2100872220</string>
     <string name="title_activity_patient">PatientActivity</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="doctor">Doctor</string>
+    <string name="room">Room</string>
+    <string name="add_patient">Add Patient</string>
+    <string name="btn_add_patient">Add Patient</string>
+    <string name="login">Login</string>
+    <string name="edit_patient">Edit Patient</string>
+    <string name="add_test">Add Test</string>
+    <string name="btn_edit_patient">Edit Patient</string>
+    <string name="main_menu">Main Menu</string>
 </resources>

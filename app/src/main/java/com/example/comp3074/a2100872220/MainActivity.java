@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         userName = (EditText) findViewById(R.id.edtUsername);
         password = (EditText)  findViewById(R.id.edtPassword);
-
+        //switchToPatientScreen();
         btnLogin.setOnClickListener(new View.OnClickListener(){
            @Override
             public void onClick(View view){
