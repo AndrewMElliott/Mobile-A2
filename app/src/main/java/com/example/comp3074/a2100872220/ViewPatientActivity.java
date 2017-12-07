@@ -135,5 +135,6 @@ public class ViewPatientActivity extends AppCompatActivity {
     public void onRestart() {
         super.onRestart();
         getPatient(String.valueOf(p.getId()));
+        populateListView();
     }
 }
